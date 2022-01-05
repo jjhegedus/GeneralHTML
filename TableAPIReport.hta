@@ -1,0 +1,238 @@
+<html>
+	<head>
+		<!-- blank title should be populated in the instanciated template -->
+		<title>Table API Report</title>
+		<HTA:APPLICATION ID="template"
+			 APPLICATIONNAME="template"
+			 BORDER="thin"
+			 BORDERSTYLE="normal"
+			 CAPTION="yes"
+			 ICON=""
+			 MAXIMIZEBUTTON="yes"
+			 MINIMIZEBUTTON="yes"
+			 SHOWINTASKBAR="yes"
+			 SINGLEINSTANCE="yes"
+			 SYSMENU="yes"
+			 VERSION="1.0"
+			 WINDOWSTATE="maximize"/>
+		<base href="I:\DBFORUM\Designer\HTMLReports\"/>
+		<script language="javascript" src="initialize.js"></script>
+		<script language="javascript">
+			// Avoid Global variables if possible.  If global variables are necessary,
+			// use window.<variableName> instead of "var variableName;"
+			
+			// The afterInitialize function is called by the initialize routine when it completes
+			function afterInitialize()
+			{
+				try
+				{
+					loadScript('AccessDatabase.js');
+					loadScript('OracleDatabase.js');
+					loadScript('Database.js');
+					
+					window.db = new Database('oracle');
+					window.db.login();
+					
+					window.strTablesSQL = "";
+					window.strTablesSQL += "SELECT \r";
+					window.strTablesSQL += "        td.name \r"; 
+					//window.strTablesSQL += "        , al.al_source \r"; 
+					//window.strTablesSQL += "        , al.al_target_location \r"; 
+					window.strTablesSQL += "        , al.al_evt_name \r"; 
+					window.strTablesSQL += "        , al.al_evt_short_description \r";
+					window.strTablesSQL += "        , rtl.txt_text \r";
+					window.strTablesSQL += "        , al.al_evt_seq_in_event \r"; 
+					window.strTablesSQL += "  FROM \r";
+					window.strTablesSQL += "        ck_application_logic al \r";
+					window.strTablesSQL += "        , ci_table_definitions td \r";
+					window.strTablesSQL += "        , rm_text_lines rtl \r";
+					window.strTablesSQL += " WHERE \r";
+					window.strTablesSQL += "        rtl.txt_ref      = al.irid \r";
+					window.strTablesSQL += "   AND  td.ivid          = rtl.parent_ivid \r";
+					window.strTablesSQL += "   AND  rtl.txt_type     = 'ALCODE' \r";
+					window.strTablesSQL += "   AND  td.name          in (%TABLE_NAMES%) \r";
+					window.strTablesSQL += " ORDER \r";
+					window.strTablesSQL += "    BY 1, 2, 5";
+										
+					window.strApplicationsSQL = "";
+					window.strApplicationsSQL += "SELECT \r";
+					window.strApplicationsSQL += "        td.name \r"; 
+					//window.strApplicationsSQL += "        , al.al_source \r"; 
+					//window.strApplicationsSQL += "        , al.al_target_location \r"; 
+					window.strApplicationsSQL += "        , al.al_evt_name \r"; 
+					window.strApplicationsSQL += "        , al.al_evt_short_description \r";
+					window.strApplicationsSQL += "        , rtl.txt_text \r";
+					window.strApplicationsSQL += "        , al.al_evt_seq_in_event \r"; 
+					window.strApplicationsSQL += "  FROM \r";
+					window.strApplicationsSQL += "        ck_application_logic al \r";
+					window.strApplicationsSQL += "        , ci_table_definitions td \r";
+					window.strApplicationsSQL += "        , sdd_folders fld \r";
+					window.strApplicationsSQL += "        , sdd_folder_members mem \r";
+					window.strApplicationsSQL += "        , rm_text_lines rtl \r";
+					window.strApplicationsSQL += " WHERE \r";
+					window.strApplicationsSQL += "        fld.irid					= mem.folder_reference \r";
+					window.strApplicationsSQL += "   AND  mem.member_object		    = td.irid \r";
+					window.strApplicationsSQL += "   AND  rtl.txt_ref               = al.irid \r";
+					window.strApplicationsSQL += "   AND  td.ivid					= rtl.parent_ivid \r";
+					window.strApplicationsSQL += "   AND  rtl.txt_type				= 'ALCODE' \r";
+					window.strApplicationsSQL += "   AND  mem.ownership_flag		= 'Y' \r";
+					window.strApplicationsSQL += "   AND  fld.name					in (%APPLICATION_NAMES%) \r";
+					window.strApplicationsSQL += " ORDER \r";
+					window.strApplicationsSQL += "    BY 1, 2, 5";
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function runTableAPIReport()
+			{
+				try
+				{
+					//first clear results
+					resultsDiv.innerHTML = '<table id="resultsTable" width="100%" height="100%"><tbody id="results"></tbody></table>';
+
+					
+					var strSQL;
+					
+					if(applicationRadio[0].checked)
+					{
+						strSQL = new String(window.strApplicationsSQL);
+						strSQL = strSQL.replace('%APPLICATION_NAMES%', applicationNames.value);
+					}
+					else
+					{
+						strSQL = new String(window.strTablesSQL);
+						strSQL = strSQL.replace('%TABLE_NAMES%', tableNames.value);
+					}
+					
+					var rsAPIInfo = window.db.getData(strSQL);
+					
+					with(rsAPIInfo)
+					{
+						var tableName;
+						var eventName;
+						var blockName
+						
+						MoveFirst();
+						while(!EOF && !BOF)
+						{
+							if(tableName != Fields('name').Value)
+							{
+								tableName = Fields('name').Value;
+								createTableRow(tableName);
+							}
+							
+							if(eventName != Fields('al_evt_name').Value)
+							{
+								eventName = Fields('al_evt_name').Value;
+								createEventRow(eventName);
+							}
+							
+							if(eventName != Fields('al_evt_short_description').Value)
+							{
+								blockName = Fields('al_evt_short_description').Value;
+								createBlockRow(blockName);
+							}
+							
+							createTextRows(Fields('txt_text'));
+							
+							MoveNext();
+						}
+					}
+				}
+				catch(e)
+				{
+					alert(e.description);
+					throw logError(e);
+				}
+			}
+			function createTableRow(tableName)
+			{
+				try
+				{
+					var tableRow = document.createElement('tr');
+					var column = document.createElement('td');
+					column.align = 'center';
+					column.style.fontWeight = 'bold'
+					column.bgColor = 'gray';
+					column.innerText = tableName;
+					column.width = '100%';
+					tableRow.appendChild(column);
+					results.appendChild(tableRow);
+				}
+				catch(e)
+				{
+				alert(e.description);
+					throw logError(e);
+				}
+			}
+			function createEventRow(eventName)
+			{
+				try
+				{
+					var tableRow = document.createElement('tr');
+					var column = document.createElement('td');
+					column.style.fontWeight = 'bold'
+					column.bgColor = 'silver';
+					column.innerText = eventName;
+					column.width = '100%';
+					tableRow.appendChild(column);
+					results.appendChild(tableRow);
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function createBlockRow(blockName)
+			{
+				try
+				{
+					var tableRow = document.createElement('tr');
+					var column = document.createElement('td');
+					column.style.fontWeight = 'bold'
+					column.innerText = blockName;
+					column.width = '100%';
+					tableRow.appendChild(column);
+					results.appendChild(tableRow);
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function createTextRows(text)
+			{
+				try
+				{
+					var tableRow = document.createElement('tr');
+					var column = document.createElement('td');
+					column.innerText = text;
+					column.style.fontFamily = 'Courier';
+					column.width = '100%';
+					tableRow.appendChild(column);
+					results.appendChild(tableRow);
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+		</script>
+	</head>
+	<body onload="initialize()" body.width="100%" body.height="100%">
+		<h1>Table API Report</h1>
+		<br>
+		<input type="radio" name="applicationRadio" checked="true"/>Applications<br/>
+		Application Names<input type="text" id="applicationNames" style="width:60%"/><br/>
+		<br/>
+		<input type="radio" name="applicationRadio" value="Table" clear="none"/>Tables<br/>
+		Table Names<input type="text" id="tableNames" style="width:60%"/><br/>
+		<br/>
+		<br/>
+		<input type="button" value="Run Table API Report" onclick="runTableAPIReport()"/>
+		<div id="resultsDiv" style="width:100%">
+		</div>
+	</body>
+</html>

@@ -1,0 +1,48 @@
+A:visited {
+	TEXT-DECORATION: none
+}
+A:link {
+	TEXT-DECORATION: none
+}
+A:active {
+	TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: red
+}
+A {
+	FONT-SIZE: 10pt; FONT-FAMILY: Arial
+}
+P {
+	FONT-SIZE: 10pt; FONT-FAMILY: Arial
+}
+TD {
+	FONT-SIZE: 10pt; FONT-FAMILY: Arial
+}
+LI {
+	FONT-SIZE: 10pt; FONT-FAMILY: Arial
+}
+BODY {
+	FONT-SIZE: 10pt; FONT-FAMILY: Arial
+}
+.small {
+	FONT-SIZE: 8pt; FONT-FAMILY: Arial
+}
+.regular {
+	FONT-SIZE: 10pt; FONT-FAMILY: Arial
+}
+.big {
+	FONT-WEIGHT: bold; FONT-SIZE: 12pt; FONT-FAMILY: Arial
+}
+.main {
+	FONT-WEIGHT: bold; FONT-SIZE: 16pt; FONT-FAMILY: Arial
+}
+.item {
+	FONT-SIZE: 8pt
+}
+.highlightsm {
+	FONT-SIZE: 8pt; COLOR: red
+}
+.highlight {
+	FONT-SIZE: 10pt; COLOR: red
+}

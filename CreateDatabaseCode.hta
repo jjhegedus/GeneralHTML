@@ -1,0 +1,655 @@
+<html>
+	<head>
+		<!-- blank title should be populated in the instanciated template -->
+		<title></title>
+		<HTA:APPLICATION ID="template"
+			 APPLICATIONNAME="template"
+			 BORDER="thin"
+			 BORDERSTYLE="normal"
+			 CAPTION="yes"
+			 ICON=""
+			 MAXIMIZEBUTTON="yes"
+			 MINIMIZEBUTTON="yes"
+			 SHOWINTASKBAR="yes"
+			 SINGLEINSTANCE="yes"
+			 SYSMENU="yes"
+			 VERSION="1.0"
+			 WINDOWSTATE="maximize"/>
+		<base href="I:\DBFORUM\Designer\HTMLReports\"/>
+		<script language="javascript" src="initialize.js"></script>
+		<script language="javascript">
+			// Avoid Global variables if possible.  If global variables are necessary,
+			// use window.<variableName> instead of "var variableName;"
+			
+			// The afterInitialize function is called by the initialize routine when it completes
+			function afterInitialize()
+			{
+				try
+				{
+					// Load the database scripts
+					loadScript('Database.js');
+					loadScript('OracleDatabase.js');
+					
+					window.db = new Database('oracle');
+					window.db.login();
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function loadColumns()
+			{
+				try
+				{
+					var sqlStr = "";
+					sqlStr += "Select col.name as columnName";
+					sqlStr += "  from ci_table_definitions tab1"; 
+					sqlStr += "			, sdd_folder_members mem"; 
+					sqlStr += "			, sdd_folders fld"; 
+					sqlStr += "			, ci_columns col";
+					sqlStr += " where mem.member_object=tab1.irid"; 
+					sqlStr += "   and mem.folder_reference=fld.irid"; 
+					sqlStr += "   and col.table_reference = tab1.irid";
+					sqlStr += "   and fld.name = '" + application_name.value + "'";
+					sqlStr += "   and tab1.name = '" + table_name.value + "'";
+					sqlStr += "   and mem.ownership_flag = 'Y'"; 
+					sqlStr += " order by col.sequence_number";
+					
+					window.rstColumns = window.db.getData(sqlStr);
+					
+					var columnNamesString = "";
+					var columnValuesString = "";
+					var columnSetString = "";
+					var columnValuesArray = new Array();
+					var columnNamesArray = new Array();
+					var ofColumnNamesString = "";
+					var ofColumnValuesString = "";
+					var ofColumnSetString = "";
+					var ofColumnsArray = new Array();
+					
+					with (window.rstColumns)
+					{
+						
+						if(!EOF && !BOF)
+						{
+							MoveFirst();
+							
+							while(!EOF)
+							{
+								columnValuesArray[columnValuesArray.length] = Fields(0).Value;
+								columnNamesArray[columnNamesArray.length] = Fields(0).Name;
+								
+								MoveNext();
+							}
+							window.columnValuesArray = columnValuesArray;
+							window.columnNamesArray = columnNamesArray;
+						}
+						else
+						{
+							alert('No data found');
+						}
+					}
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function window.get_columnsString(strIndent, prefix, names, tableType, set, secondPrefix)
+			{
+				try
+				{
+					/* tableType:	{"WIP", "OF", "CH"} */
+
+					/* Set default values */
+					if(typeof(names) == 'undefined')
+					{
+						names = false;
+					}
+					
+					if(typeof(tableType) == 'undefined')
+					{
+						tableType = "WIP";
+					}
+					
+					if(typeof(set) == 'undefined')
+					{
+						set = false;
+					}
+					
+					if(typeof(prefix) == 'undefined')
+					{
+						prefix = "";
+					}
+					
+					if(typeof(secondPrefix) == 'undefined')
+					{
+						secondPrefix = "cg$rec.";
+					}
+					
+					var columnsString = "";
+					
+					if(names)
+					{
+						for(var intLp = 0;intLp < window.columnNamesArray.length;intLp++)
+						{
+							if(tableType = "WIP")
+							{
+								if(set)
+								{
+									columnsString += prefix + window.columnNamesArray[intLp] + ' := 	' +  secondPrefix + window.columnNamesArray[intLp] + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+								}
+								else
+								{
+									columnsString += prefix + window.columnNamesArray[intLp] + ', ' + String.fromCharCode(10) + strIndent;
+								}
+							}
+							else if(tableType == "OF")
+							{
+								if(window.columnNamesArray[intLp] != 'STATUS')
+								{
+									if(set)
+									{
+										if(intLp != 0)
+										{
+											columnsString += prefix + window.columnNamesArray[intLp] + ' = 	' +  secondPrefix + window.columnNamesArray[intLp] + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+										}
+									}
+									else
+									{
+										columnsString += prefix + window.columnNamesArray[intLp] + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+									}
+								}
+							}
+							else
+							{
+								if(set)
+								{
+									columnsString += prefix + window.columnNamesArray[intLp] + ' := 	' +  secondPrefix + window.columnNamesArray[intLp] + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+								}
+								else
+								{
+									columnsString += prefix + window.columnNamesArray[intLp] + ', ' + String.fromCharCode(10) + strIndent;
+								}
+							}
+						}
+					}
+					else
+					{
+						for(var intLp = 0;intLp < window.columnValuesArray.length;intLp++)
+						{
+							if(tableType == "WIP")
+							{
+								if(set)
+								{
+									columnsString += prefix + window.columnValuesArray[intLp] + ' := 	' +  secondPrefix + window.columnValuesArray[intLp] + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+									
+								}
+								else
+								{
+									columnsString += prefix + window.columnValuesArray[intLp] + ', ' + String.fromCharCode(10) + strIndent;
+								}
+							}
+							else if(tableType == "OF")
+							{
+								if(window.columnValuesArray[intLp] != 'STATUS')
+								{
+									if(set)
+									{
+										if(intLp != 0)
+										{
+											columnsString += prefix + window.columnValuesArray[intLp] + ' 		= ' +  secondPrefix + window.columnValuesArray[intLp] + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+										}
+									}
+									else
+									{
+										columnsString += prefix + window.columnValuesArray[intLp] + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+									}
+								}
+							}
+							else if(tableType = "CONSTANTS")
+							{
+								if(set)
+								{
+									columnsString += prefix + window.columnValuesArray[intLp] + ' := 	' +  secondPrefix + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+								}
+								else
+								{
+									columnsString += "'1'" + ', ' + String.fromCharCode(10) + strIndent;
+								}
+							}
+							else
+							{
+								if(set)
+								{
+									columnsString += prefix + window.columnValuesArray[intLp] + ' := 	' +  secondPrefix + window.columnValuesArray[intLp] + ', ' + String.fromCharCode(10) + String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+									
+								}
+								else
+								{
+									columnsString += prefix + window.columnValuesArray[intLp] + ', ' + String.fromCharCode(10) + strIndent;
+								}
+							}
+						}
+					}
+
+					if(tableType == 'CH')
+					{
+						if(set)
+						{
+							
+						}
+						else
+						{
+							columnsString += prefix + 'REV_NBR';
+						}
+					}
+					
+					columnsString = new String(columnsString);
+					columnsString = columnsString.slice(0, columnsString.length - (strIndent.length + 3));
+					return columnsString;
+					
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function Create_Change_History_onclick(changeType)
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+					
+					if(changeType == 'D')
+					{
+						var procStr = "";
+						procStr += "BEGIN" + String.fromCharCode(10);
+						procStr += "	INSERT" + String.fromCharCode(10); 
+						procStr += "		INTO " + table_name.value + '_CH' + String.fromCharCode(10);
+						procStr += "			(" + window.get_columnsString(strIndent) + ", " + String.fromCharCode(10);
+						procStr += "			 " + "CHANGE_TYPE)" + String.fromCharCode(10);
+						procStr += "	SELECT 		" + window.get_columnsString(strIndent) + ", " + String.fromCharCode(10);
+						procStr += "			'D'" + String.fromCharCode(10);
+						procStr += "		FROM 	" + table_name.value + "_CH" + String.fromCharCode(10);   
+						procStr += "	 WHERE " + table_name.value + "_ID = cg$pk." + table_name.value + "_ID" + String.fromCharCode(10);
+						procStr += "	   AND REV_NBR			= (SELECT MAX(REV_NBR)" + String.fromCharCode(10); 
+						procStr += "								    FROM " + table_name.value + "_CH" + String.fromCharCode(10);  
+						procStr += "								   WHERE " + table_name.value + "_ID = cg$pk." + table_name.value + "_ID);" + String.fromCharCode(10);
+						procStr += "END;" + String.fromCharCode(10);
+					}
+					else
+					{
+						var localPrefix = ':NEW.';
+
+						/* This shouldn't be necessary but saving just in case
+						if(changeType == 'U')
+						{
+							localPrefix = ':NEW.';
+						}
+						else
+						{
+							localPrefix = 'cg$rec.';
+						}
+						*/
+						
+						var procStr = "";
+						procStr += "BEGIN" + String.fromCharCode(10);
+						procStr += "	INSERT" + String.fromCharCode(10); 
+						procStr += "		INTO " + table_name.value + '_CH' + String.fromCharCode(10);
+						procStr += "			(" + window.get_columnsString(strIndent) + ", " + String.fromCharCode(10);
+						procStr += "			 " + "CHANGE_TYPE)" + String.fromCharCode(10);
+						procStr += "	VALUES" + String.fromCharCode(10);
+						procStr += "			(" + window.get_columnsString(strIndent, localPrefix) + ", " + String.fromCharCode(10);
+						procStr += "			 '" + changeType + "');" + String.fromCharCode(10);
+						procStr += "END;" + String.fromCharCode(10);
+					}
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function Pass_to_Official_Insert_onclick()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "BEGIN" + String.fromCharCode(10);
+					procStr += "  IF :NEW.STATUS = 'P' THEN" + String.fromCharCode(10); 
+					procStr += "	INSERT" + String.fromCharCode(10); 
+					procStr += "		INTO " + table_name.value + '_OF' + String.fromCharCode(10);
+					procStr += "			(" + window.get_columnsString(strIndent, "", false, "OF") + ")" + String.fromCharCode(10);
+					procStr += "	VALUES" + String.fromCharCode(10);
+					procStr += "			(" + window.get_columnsString(strIndent, ":NEW.", false, "OF") + ");" + String.fromCharCode(10);
+					procStr += "  END IF;" + String.fromCharCode(10); 
+					procStr += "END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function Pass_to_Official_Update_onclick()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "BEGIN" + String.fromCharCode(10);
+					procStr += "  IF :NEW.STATUS = 'P' THEN" + String.fromCharCode(10); 
+					procStr += "	BEGIN" + String.fromCharCode(10);
+					procStr += "	  INSERT" + String.fromCharCode(10); 
+					procStr += "		INTO " + table_name.value + '_OF' + String.fromCharCode(10);
+					procStr += "			(" + window.get_columnsString(strIndent, "", false, "OF") + ")" + String.fromCharCode(10);
+					procStr += "	  VALUES" + String.fromCharCode(10);
+					procStr += "			(" + window.get_columnsString(strIndent, ":NEW.", false, "OF") + ");" + String.fromCharCode(10);
+					procStr += "	EXCEPTION" + String.fromCharCode(10);
+					procStr += "            WHEN DUP_VAL_ON_INDEX  THEN" + String.fromCharCode(10);
+					procStr += "                UPDATE " + table_name.value + "_OF" + String.fromCharCode(10);
+					procStr += "                   SET ";
+					procStr += window.get_columnsString(strIndent, "", false, "OF", true, ":NEW.") + String.fromCharCode(10);
+					procStr += "                 WHERE " + window.columnValuesArray[0] + " 	= :NEW." + window.columnValuesArray[0] + ";" + String.fromCharCode(10);
+					procStr += "	  END;" + String.fromCharCode(10);
+					procStr += "  END IF;" + String.fromCharCode(10); 
+					procStr += "END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function Delete_from_Official_onclick()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "BEGIN" + String.fromCharCode(10);
+					procStr += "	DELETE FROM " + table_name.value + '_OF' + String.fromCharCode(10);
+					procStr += "	 WHERE " + window.columnValuesArray[0] + " = cg$pk." + window.columnValuesArray[0] + ";" + String.fromCharCode(10);
+					procStr += "END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function Set_Status_to_Pass()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "BEGIN" + String.fromCharCode(10);
+					procStr += "	cg$ind.STATUS := TRUE;" + String.fromCharCode(10);
+					procStr += "	cg$rec.STATUS := 'P';" + String.fromCharCode(10);
+					procStr += "END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function Default_Changes_to_Unpassed_onclick()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "BEGIN" + String.fromCharCode(10);
+					procStr += "	IF cg$ind.status = FALSE" + String.fromCharCode(10);
+					procStr += "	OR cg$rec.status  IS NULL THEN " + String.fromCharCode(10);
+					procStr += "		cg$rec.status := 'U'; " + String.fromCharCode(10);
+					procStr += "		cg$ind.status := TRUE;" + String.fromCharCode(10);
+					procStr += "	END IF;" + String.fromCharCode(10);
+					procStr += "END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function Initialize_Status_onclick()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+
+					procStr += "BEGIN" + String.fromCharCode(10);
+					procStr += "	IF <package_name>.autopass THEN" + String.fromCharCode(10);
+					procStr += "		cg$ind.STATUS := TRUE;" + String.fromCharCode(10);
+					procStr += "		cg$rec.STATUS := 'P';" + String.fromCharCode(10);
+					procStr += "	ELSE" + String.fromCharCode(10);
+					procStr += "		IF cg$ind.status = FALSE" + String.fromCharCode(10);
+					procStr += "		OR cg$rec.status  IS NULL THEN " + String.fromCharCode(10);
+					procStr += "			cg$rec.status := 'U'; " + String.fromCharCode(10);
+					procStr += "			cg$ind.status := TRUE;" + String.fromCharCode(10);
+					procStr += "		END IF;" + String.fromCharCode(10);
+					procStr += "	END IF;" + String.fromCharCode(10);
+					procStr += "END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function Updating_Primary_Key_onclick()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "BEGIN" + String.fromCharCode(10);
+					procStr += "	IF cg$ind." + window.columnValuesArray[0] + " THEN" + String.fromCharCode(10);
+					procStr += "		" + "APPL_ERROR_PKG.UPDATING_PRIMARY_KEY('" + table_name.value + "_PK');" + String.fromCharCode(10);
+					procStr += "	END IF;" + String.fromCharCode(10);
+					procStr += "END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function InsertTest_onclick()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "	l_test_id := l_test_id + 1;" + String.fromCharCode(10);
+					procStr += "	l_test_message := 'Insert HCP_CD with STATUS = ''P''.';" + String.fromCharCode(10);
+					procStr += "	" + String.fromCharCode(10);
+					procStr += "	DECLARE" + String.fromCharCode(10);
+					procStr += "		l_max_rev_before NUMBER(10);" + String.fromCharCode(10);
+					procStr += "		l_max_rev_after NUMBER(10);" + String.fromCharCode(10);
+					procStr += "	BEGIN" + String.fromCharCode(10); 
+					procStr += "		SELECT hcp_cd_seq.nextval" + String.fromCharCode(10); 
+					procStr += "		INTO l_hcp_cd_id2" + String.fromCharCode(10); 
+					procStr += "		FROM dual;" + String.fromCharCode(10); 
+					procStr += "		" + String.fromCharCode(10); 
+					procStr += "		l_max_rev_before := max_change_rev_nbr('HCP_CD', l_hcp_cd_id2);" + String.fromCharCode(10); 
+					procStr += "		" + String.fromCharCode(10); 
+					procStr += "		INSERT" + String.fromCharCode(10); 
+					procStr += "		  INTO " + table_name.value + String.fromCharCode(10);
+					procStr += "			(" + window.get_columnsString(strIndent) + String.fromCharCode(10);
+					procStr += "		VALUES" + String.fromCharCode(10);
+					procStr += "			(" + window.get_columnsString(strIndent, "", false, "CONSTANTS") + "); " + String.fromCharCode(10);
+					procStr += "			" + String.fromCharCode(10);
+					procStr += "		l_max_rev_after := max_change_rev_nbr('HCP_CD', l_hcp_cd_id);" + String.fromCharCode(10);
+					procStr += "	         " + String.fromCharCode(10);
+					procStr += "		IF (l_max_rev_after - l_max_rev_before) != 1 THEN" + String.fromCharCode(10);
+					procStr += "			failure ('Change history record not written');" + String.fromCharCode(10);
+					procStr += "		ELSE" + String.fromCharCode(10);
+					procStr += "	         " + String.fromCharCode(10);
+					procStr += "			SELECT status" + String.fromCharCode(10);
+					procStr += "			  INTO l_status" + String.fromCharCode(10);
+					procStr += "			 FROM hcp_cd" + String.fromCharCode(10);
+					procStr += "			WHERE hcp_cd_id = l_hcp_cd_id;" + String.fromCharCode(10);
+					procStr += "	             " + String.fromCharCode(10);
+					procStr += "			IF nvl(l_status, 'NULL') != 'U' THEN" + String.fromCharCode(10);
+					procStr += "				failure('Status should not be ' || nvl(l_status, 'NULL') || '.  It should be forced to ''U''.');" + String.fromCharCode(10);
+					procStr += "			ELSE" + String.fromCharCode(10);
+					procStr += "				success;" + String.fromCharCode(10);
+					procStr += "			END IF;" + String.fromCharCode(10);
+					procStr += "		END IF;" + String.fromCharCode(10);
+					procStr += "	EXCEPTION" + String.fromCharCode(10);
+					procStr += "		WHEN others THEN" + String.fromCharCode(10);
+					procStr += "			success(sqlerrm);" + String.fromCharCode(10);
+					procStr += "			" + String.fromCharCode(10);
+					procStr += "	END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function UpdateTest_onclick()
+			{
+				try
+				{
+					
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "	l_test_id := l_test_id + 1;" + String.fromCharCode(10);
+					procStr += "	l_test_message := 'Update HCP_CD with STATUS = ''P''.';" + String.fromCharCode(10);
+					procStr += "	" + String.fromCharCode(10);
+					procStr += "	BEGIN" + String.fromCharCode(10); 
+					procStr += "		l_max_rev_before := max_change_rev_nbr('HCP_CD', l_hcp_cd_id2);" + String.fromCharCode(10); 
+					procStr += "		" + String.fromCharCode(10); 
+					procStr += "		UPDATE " + table_name.value + String.fromCharCode(10);
+					procStr += "                   SET ";
+					procStr += window.get_columnsString(strIndent, "", false, "CONSTANTS", true, "'1'") + String.fromCharCode(10);
+					procStr += "		 WHERE 	primary_key = primary_key;" + String.fromCharCode(10);
+					procStr += "			" + String.fromCharCode(10);
+					procStr += "		l_max_rev_after := max_change_rev_nbr('HCP_CD', l_hcp_cd_id);" + String.fromCharCode(10);
+					procStr += "	         " + String.fromCharCode(10);
+					procStr += "		IF (l_max_rev_after - l_max_rev_before) != 1 THEN" + String.fromCharCode(10);
+					procStr += "			failure ('Change history record not written');" + String.fromCharCode(10);
+					procStr += "		ELSE" + String.fromCharCode(10);
+					procStr += "	         " + String.fromCharCode(10);
+					procStr += "			SELECT status" + String.fromCharCode(10);
+					procStr += "			  INTO l_status" + String.fromCharCode(10);
+					procStr += "			 FROM hcp_cd" + String.fromCharCode(10);
+					procStr += "			WHERE hcp_cd_id = l_hcp_cd_id;" + String.fromCharCode(10);
+					procStr += "	             " + String.fromCharCode(10);
+					procStr += "			IF nvl(l_status, 'NULL') != 'U' THEN" + String.fromCharCode(10);
+					procStr += "				failure('Status should not be ' || nvl(l_status, 'NULL') || '.  It should be forced to ''U''.');" + String.fromCharCode(10);
+					procStr += "			ELSE" + String.fromCharCode(10);
+					procStr += "				success;" + String.fromCharCode(10);
+					procStr += "			END IF;" + String.fromCharCode(10);
+					procStr += "		END IF;" + String.fromCharCode(10);
+					procStr += "	EXCEPTION" + String.fromCharCode(10);
+					procStr += "		WHEN others THEN" + String.fromCharCode(10);
+					procStr += "			success(sqlerrm);" + String.fromCharCode(10);
+					procStr += "			" + String.fromCharCode(10);
+					procStr += "	END;" + String.fromCharCode(10);
+
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function DeleteTest_onclick()
+			{
+				try
+				{
+					var strIndent = String.fromCharCode(9) + String.fromCharCode(9) + String.fromCharCode(9) + ' ';
+
+					var procStr = "";
+					procStr += "	l_test_id := l_test_id + 1;" + String.fromCharCode(10);
+					procStr += "	l_test_message := 'Update HCP_CD with STATUS = ''P''.';" + String.fromCharCode(10);
+					procStr += "	" + String.fromCharCode(10);
+					procStr += "	BEGIN" + String.fromCharCode(10); 
+					procStr += "		l_max_rev_before := max_change_rev_nbr('HCP_CD', l_hcp_cd_id2);" + String.fromCharCode(10); 
+					procStr += "		" + String.fromCharCode(10); 
+					procStr += "		DELETE FROM " + table_name.value + String.fromCharCode(10);
+					procStr += "		 WHERE 	primary_key = primary_key;" + String.fromCharCode(10);
+					procStr += "			" + String.fromCharCode(10);
+					procStr += "		l_max_rev_after := max_change_rev_nbr('HCP_CD', l_hcp_cd_id);" + String.fromCharCode(10);
+					procStr += "	         " + String.fromCharCode(10);
+					procStr += "		IF (l_max_rev_after - l_max_rev_before) != 1 THEN" + String.fromCharCode(10);
+					procStr += "			failure ('Change history record not written');" + String.fromCharCode(10);
+					procStr += "		ELSE" + String.fromCharCode(10);
+					procStr += "	         " + String.fromCharCode(10);
+					procStr += "			SELECT status" + String.fromCharCode(10);
+					procStr += "			  INTO l_status" + String.fromCharCode(10);
+					procStr += "			 FROM hcp_cd" + String.fromCharCode(10);
+					procStr += "			WHERE hcp_cd_id = l_hcp_cd_id;" + String.fromCharCode(10);
+					procStr += "	             " + String.fromCharCode(10);
+					procStr += "			IF nvl(l_status, 'NULL') != 'U' THEN" + String.fromCharCode(10);
+					procStr += "				failure('Status should not be ' || nvl(l_status, 'NULL') || '.  It should be forced to ''U''.');" + String.fromCharCode(10);
+					procStr += "			ELSE" + String.fromCharCode(10);
+					procStr += "				success;" + String.fromCharCode(10);
+					procStr += "			END IF;" + String.fromCharCode(10);
+					procStr += "		END IF;" + String.fromCharCode(10);
+					procStr += "	EXCEPTION" + String.fromCharCode(10);
+					procStr += "		WHEN others THEN" + String.fromCharCode(10);
+					procStr += "			success(sqlerrm);" + String.fromCharCode(10);
+					procStr += "			" + String.fromCharCode(10);
+					procStr += "	END;" + String.fromCharCode(10);
+
+					results.innerText = procStr;
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+		</script>
+	</head>
+	<body onload="initialize()" body.width="100%" body.height="100%">
+		<input type="text" id="application_name" name="application_name" value="application_name" style="width:200"/><br/>
+		<input type="text" id="table_name" name="table_name" value="table_name" style="width:200"/><br/>
+		<br/>
+		<input type="button" value="Load_Columns" onclick="loadColumns()"/><br/>
+		<input type="button" value="Create_Change_History_Add" onclick="Create_Change_History_onclick('A')"/><br/>
+		<input type="button" value="Create_Change_History_Change" onclick="Create_Change_History_onclick('C')"/><br/>
+		<input type="button" value="Create_Change_History_Delete" onclick="Create_Change_History_onclick('D')"/><br/>
+		<input type="button" value="Pass_to_Official_Insert" onclick="Pass_to_Official_Insert_onclick()"/><br/>
+		<input type="button" value="Pass_to_Official_Update" onclick="Pass_to_Official_Update_onclick()"/><br/>
+		<input type="button" value="Delete_from_Official" onclick="Delete_from_Official_onclick()"/><br/>
+		<input type="button" value="Set_Status_to_Pass" onclick="Set_Status_to_Pass()"/><br/>
+		<input type="button" value="Set_Status_to_Pass" onclick="Set_Status_to_Pass()"/><br/>
+		<input type="button" value="Initialize_Status" onclick="Initialize_Status_onclick()"/><br/>
+		<input type="button" value="Updating_Primary_Key" onclick="Updating_Primary_Key_onclick()"/><br/>
+		<input type="button" value="Insert_Test" onclick="InsertTest_onclick()"/><br/>
+		<input type="button" value="Update_Test" onclick="UpdateTest_onclick()"/><br/>
+		<input type="button" value="Delete_Test" onclick="DeleteTest_onclick()"/><br/>
+		<br/>
+		<textArea id="results" name="results" style="height:500;width:100%"></textArea>
+	</body>
+</html>

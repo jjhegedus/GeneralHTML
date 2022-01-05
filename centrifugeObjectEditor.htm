@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" ><html>
+  <head>
+    <meta name=vs_targetSchema content="http://schemas.microsoft.com/intellisense/ie5">
+<title>editObjects.htm</title>
+    <script language="javascript">
+      function originalLoadFunction()
+      {
+				//alert("originalLoadFunction")
+			}
+			function Centrifuge_afterLoad()
+			{
+				loadObject(txtObjectId.value);
+			}
+			function loadObject(objectId)
+			{
+				h2SubTitle.innerText = "Edit Object: objectId=" + objectId;
+				
+				textArea_object.innerText = 
+					centrifuge.loadObjectNode(objectId).xml;
+			}
+			function storeObject()
+			{
+				var tmpDoc = new ActiveXObject("Microsoft.XMLDOM");
+				tmpDoc.loadXML(textArea_object.innerText);
+
+				centrifuge.storeObjectNode(tmpDoc.documentElement);
+			}
+			function btnLoadObject_onclick()
+			{
+				loadObject(txtObjectId.value);
+			}
+			function btnStoreObject_onclick()
+			{
+				storeObject();
+			}
+    </script>
+  </head>
+  <body id="body" onload="originalLoadFunction()">
+    <script src="reference/bootstrap.js" language="javascript">
+    </script>
+    </br>
+    <h1>Edit Objects</h1><br/>
+    <h2 id="h2SubTitle">Edit Object: objectId=0</h2><br/>
+    <textarea
+			id="textArea_object" 
+			name="textArea_object" 
+			style="height:500;width:1000">
+		</textarea><br/>
+		ObjectId: <input type="text" name="txtObjectId" id="txtObjectId" style="width:20" value="0"/>
+		<input 
+			type="button" 
+			id="btnLoadObject" 
+			name="btnLoadSObject"
+			value="Load"
+			onclick="btnLoadObject_onclick()"/>
+		<input 
+			type="button" 
+			id="btnStoreObject" 
+			name="btnStoreObject"
+			value="Store"
+			onclick="btnStoreObject_onclick()"/><br/>
+  </body>
+</html>

@@ -1,0 +1,219 @@
+<html>
+	<head>
+		<title>createXMLDialog.htm</title>
+		<base href="I:\DBFORUM\Designer\HTMLReports\"/>
+ 		<script language="JavaScript" src="Utility.js"></script>
+		<script language="JavaScript">
+			
+			var xmlArg;
+			var initialFocusControl;
+			
+			function load()
+			{
+				try
+				{
+					xmlArg = window.dialogArguments;
+					var formHTML = '<table id="formTable" name="formTable" width="100%" height="100%"><tbody id="formTableBody" name="formTableBody" width="100%" height="100%"></tbody></table>';
+					document.body.innerHTML = formHTML;
+
+
+					var fields = xmlArg.selectNodes('fields/*');
+					
+					for(var i = 0;i < fields.length;i++)
+					{
+						var newRow = document.createElement('tr');
+						var newCell = document.createElement('td');
+						newCell.colspan = '2';
+						newCell.width = '100%';
+						newCell.align = 'center';
+						newCell.innerText = fields.item(i).tagName;
+						
+						newRow.appendChild(newCell);
+
+
+						var newControl;
+						var dataType = getXMLAttributeValue(fields.item(i), 'dataType');
+						var initialFocus = getXMLAttributeValue(fields.item(i), 'initialFocus');
+						
+						if(dataType == null)
+						{
+							dataType = 'text';  // default value
+						}
+						
+						switch(dataType)
+						{
+							case 'text':
+								newControl = document.createElement('input');
+								newControl.type = 'text';
+								break;
+							case 'long':
+								newControl = document.createElement('textarea');
+								
+								var data = fields.item(i).text;
+								var dataLength = data.length;
+								var textAreaHeight = (Math.round(dataLength / 40)) * 50;
+								newControl.style.width = 600;
+								newControl.style.height = textAreaHeight;
+								break;
+							case 'password':
+								newControl = document.createElement('input');
+								newControl.type = 'password';
+								break;
+						}
+
+						var tabIndex = getXMLAttributeValue(fields.item(i), 'tabIndex');
+
+						if(tabIndex)
+						{
+							newControl.tabIndex = tabIndex;
+						}
+
+
+
+						var select = getXMLAttributeValue(fields.item(i), 'select')
+						if(select == null)
+						{
+							select = true;   // default value
+						}
+
+
+						newControl.id = fields.item(i).tagName;
+						newControl.name = fields.item(i).tagName;
+						newControl.value = fields.item(i).text;
+						//newControl.style.width = '100%';
+						//newControl.height = '100%';
+
+						if(select)
+						{
+							var modify = getXMLAttributeValue(fields.item(i), 'modify');
+							if(!modify)
+							{
+								newControl.onkeydown = 'disableChange()';
+							}
+
+
+							
+						}
+						else
+						{
+								newControl.onkeydown = 'disableChange()';
+								newControl.disabled = 'true';
+						}
+
+						if(initialFocus == 'true')
+						{
+							initialFocusControl = newControl;
+						}
+						
+						newCell.appendChild(newControl);
+						formTableBody.align = 'center';
+						formTableBody.appendChild(newRow);
+
+					}
+
+
+					var okCancelRow = document.createElement('tr');
+
+					var okCell = document.createElement('td');
+					okCell.width = '50%';
+					okCell.align = 'center';
+					okCancelRow.appendChild(okCell);
+					var btnOK = document.createElement('input');
+					btnOK.type = 'submit';
+					btnOK.value = 'OK';
+					btnOK.onclick = btnOK_onclick;
+					okCell.appendChild(btnOK);
+
+					var cancelCell = document.createElement('td');
+					cancelCell.width = '50%';
+					cancelCell.align = 'center';
+					okCancelRow.appendChild(cancelCell);
+					var btnCancel = document.createElement('input');
+					btnCancel.type = 'button';
+					btnCancel.value = 'Cancel';
+					btnCancel.onclick = btnCancel_onclick;
+					okCell.appendChild(btnCancel);
+
+					formTableBody.appendChild(okCancelRow);
+					
+					if(initialFocusControl)
+					{
+						initialFocusControl.focus();
+					}
+				}
+				catch(e)
+				{
+					alert('Error in createXMLDialog\r' + e.description);
+				}
+			}
+		
+			function btnOK_onclick()
+			{
+				processForm();
+			}
+			
+			function processForm()
+			{
+				var inputTags = formTable.all.tags('input');
+				var xmlString = '';
+
+				var fields = xmlArg.selectNodes('fields/*[@modify="true"]');
+				
+				for(var i = 0;i < fields.length;i++)
+				{
+					fields.item(i).text = inputTags[i].value;
+				}
+
+				window.close();
+			}
+			
+			function btnCancel_onclick()
+			{
+				var fieldsNode = xmlArg.selectSingleNode('fields');
+
+				addAttributeToXMLNode(fieldsNode, 'cancel', 'true');
+				window.close();
+			}
+			function disableChange()
+			{
+				event.returnValue = false;
+			}
+		</script>
+	</head>
+	<body onload="load()" align="center">
+
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

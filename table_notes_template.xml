@@ -1,0 +1,22 @@
+<population_of_data>
+	<line>Sample Population of data</line>
+	<line>Sample Population of data line 2</line>
+</population_of_data>
+<maintenance_details>
+	<line>Sample Maintenance Details</line>
+</maintenance_details>
+<security>
+	<line>Sample Security</line>
+</security>
+<indexes>
+	<line>Sample New of Changed Indexes or Constraints</line>
+</indexes>
+<approval>
+	<line>Sample Approval Required</line>
+</approval>
+<triggers>
+	<line>Sample Associated Triggers</line>
+</triggers>
+<issues>
+	<line>Sample Issues</line>
+</issues>

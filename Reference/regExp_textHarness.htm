@@ -1,0 +1,133 @@
+<html>
+	<head>
+		<script language="javascript">
+			function constructorName(constructor)
+			{
+				try
+				{
+					var constructorString = new String(constructor);
+	                
+	 				return constructorString.slice(9, constructorString.indexOf('('));
+				}
+				catch(e)
+				{
+				throwError('constructorName', e);
+				}
+			}
+
+			function logError(error, errorInformation)
+		        {
+		                try
+		                {
+		                        var functionName = constructorName(logError.caller);
+
+		                        var errStr = '';
+		                        errStr += 'Error in ';
+		                        errStr += functionName;
+                        
+		                        var callerFunctionArgumentsString = new String();
+		                        for(var argCount = 0;argCount < logError.caller.arguments.length;argCount++)
+		                        {
+ 						callerFunctionArgumentsString += logError.caller.arguments[argCount];
+						callerFunctionArgumentsString += ', ';
+					}
+                                                
+					callerFunctionArgumentsString = callerFunctionArgumentsString.slice(0, - 2);
+
+					errStr += '(' + callerFunctionArgumentsString + ')';
+                                
+					if(errorInformation)
+					{
+						errStr += '\r    Error Information:\r'
+ 						errStr += errorInformation
+					}
+                                
+					errStr += '\r'
+                        		errStr += error.description;
+                        
+                        		var tError = new Error(1000 + error.number, errStr);
+                		}
+                		catch(outerE)
+                		{
+ 					var errStr = 'Error in logError:\r  functionName = ' + functionName + '\r  errorInformation = ' + errorInformation + '\r' + outerE.description;
+					throw errStr;
+ 				}
+                        
+                		return tError;
+			}
+
+			function window.onerror(errorMessage, url, lineNumber)
+			{
+				try
+				{
+					var errorSourceFunction = window.onerror.caller;
+					var errorSourceFunctionName = constructorName(errorSourceFunction);
+
+					var errorMessage = 'error in ' + url + '\r  function ' + errorSourceFunctionName;
+					var callerFunctionArgumentsString = new String();
+					for(var argCount = 0;argCount < errorSourceFunction.arguments.length;argCount++)
+ 					{
+ 						callerFunctionArgumentsString += errorSourceFunction.arguments[argCount];
+ 						callerFunctionArgumentsString += ', ';
+ 					}
+                                                
+					callerFunctionArgumentsString = callerFunctionArgumentsString.slice(0, - 2);
+                                                
+					errorMessage += '(' + callerFunctionArgumentsString + ')\r  ' + errorMessage + '  at line ' + lineNumber;
+					alert(errorMessage);
+
+					// setting the event.returnValue equal to true
+					// will suppress the Internet Explorer default error message
+					event.returnValue = true;
+				}
+ 				catch(e)
+ 				{
+					alert('Error in window.onerror\r' + e.description);
+ 				}
+        		}
+			
+			function load()
+			{
+				try
+				{
+					
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+			function processRegExp()
+			{
+				try
+				{
+					var regExpResult;
+					var searchExp = new RegExp(regExpText.value, "g");
+					while ((regExpResult = searchExp.exec(textToProcess.value)) != null)
+					{
+						var msg;
+						msg = ""
+						msg += "RegExp:  " + regExpText.value + "";
+						msg += "\rRegExp.lastMatch:  " + RegExp.lastMatch + "";
+						msg += "\rLocation:  " + RegExp.lastIndex + "";
+						msg += "\r\r\rText Searched:\r" + textToProcess.value;
+						
+						alert(msg);
+					}
+				}
+				catch(e)
+				{
+					alert(e.description);
+				}
+			}
+		</script>
+	</head>
+	<body onload="load()" height="100%" width="100%">
+		<div style="height:100%;width:100%">
+			Search Text:<input type="text" name="textToProcess" id="textToProcess" style="width:500;height:100"/>
+			<br/>
+			<br/>
+			Regular Expression:<input type="text" name="regExpText" id="regExpText" style="width:500;height:50"/><input type="button" value="processRegExp" onclick="processRegExp()"/>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0047)http://trident.mcs.kent.edu/~jbirk/Web/rgb.html -->
+<HTML><HEAD><TITLE>Josh Birk's Home Page - Web Publishing - RGB Color Web Utility</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252"><LINK 
+href="RGB Color Web Utility_files/main.css" rel=stylesheet>
+<SCRIPT language=JavaScript>
+<!--
+function roll(){return};
+// -->
+</SCRIPT>
+
+<SCRIPT language=JavaScript1.2 
+src="RGB Color Web Utility_files/rolls.js">
+</SCRIPT>
+
+<META content="MSHTML 6.00.2719.2200" name=GENERATOR></HEAD>
+<BODY><SPAN class=main>RGB Color Web Utility</SPAN>
+<SCRIPT language=JavaScript>
+<!-- hide from older browsers
+function DecToHex()
+ {var hex="";
+  var r=document.forms[0].r.value.toString(10);
+  var g=document.forms[0].g.value.toString(10);
+  var b=document.forms[0].b.value.toString(10);
+  if (r>255)
+   {alert('no values over 255 are allowed for rgb colors');
+    document.forms[0].r.focus();
+	return;
+   }
+  else if (g>255)
+   {alert('no values over 255 are allowed for rgb colors');
+    document.forms[0].g.focus();
+	return;
+   }
+  else if (b>255)
+   {alert('no values over 255 are allowed for rgb colors');
+    document.forms[0].b.focus();
+	return;
+   }
+  hex=ConvertNum(r) + ConvertNum(g) + ConvertNum(b);
+  document.forms[0].hex.value=hex;
+ }
+ 
+function ConvertNum(i)
+{var hex="";
+ var j;
+ j=Math.floor(i/16);
+ switch(j)
+  { case 10:  hex+="A"; break;
+    case 11:  hex+="B"; break;
+	case 12:  hex+="C"; break;
+	case 13:  hex+="D"; break;
+	case 14:  hex+="E"; break;
+	case 15:  hex+="F"; break;
+    default:  hex+=j.toString();
+  }
+ i=i%16;
+ switch(i)
+  { case 10:  hex+="A"; break;
+    case 11:  hex+="B"; break;
+	case 12:  hex+="C"; break;
+	case 13:  hex+="D"; break;
+	case 14:  hex+="E"; break;
+	case 15:  hex+="F"; break;
+    default:  hex+=i.toString();
+  }
+ return hex;
+}
+function HexToDec()
+{var hex=document.forms[0].hex.value;
+ if (hex.length!=6)
+  {alert('The hex value MUST be 6 characters in length');
+   document.forms[0].hex.focus();
+   return;
+  }
+ if (!check_hex())
+  {alert('The hex values can range from 00 to FF, the letters G-Z are not allowed');
+   document.forms[0].hex.focus();
+   return;
+  }
+ var r=hex.substring(0,2);
+ var g=hex.substring(2,4);
+ var b=hex.substring(4,6);
+ r=parseInt("0x" + r);
+ g=parseInt("0x" + g);
+ b=parseInt("0x" + b);
+ document.forms[0].r.value=r;
+ document.forms[0].g.value=g;
+ document.forms[0].b.value=b;
+} 
+function check_hex()
+{var i;
+ var hex=document.forms[0].hex.value;
+ for (i=0; i<6; i++)
+  if (!check(hex.substring(i,i+1)))
+   return false;
+ return true;
+}
+function check(i)
+{switch(i)
+ {case '0':
+  case '1':
+  case '2':
+  case '3':
+  case '4':
+  case '5':
+  case '6':
+  case '7':
+  case '8':
+  case '9':
+  case 'a':
+  case 'b':
+  case 'c':
+  case 'd':
+  case 'e':
+  case 'f':
+  case 'A':
+  case 'B':
+  case 'C':
+  case 'D':
+  case 'E':
+  case 'F': return true;
+  default: return false;
+ }
+}
+  
+function changeBG()
+ {var hex=document.forms[0].hex.value;
+  if (hex.length!=6)
+   {alert('The hex value MUST be 6 characters in length');
+    document.forms[0].hex.focus();
+    return;
+   }
+  if (!check_hex())
+   {alert('The hex values can range from 00 to FF, the letters G-Z are not allowed');
+    document.forms[0].hex.focus();
+    return;
+   }
+  document.bgColor=hex;
+ }
+var step=16; //the amount to step by when clicking on plus and minus buttons
+function RedPlus()
+{var i=parseInt(document.forms[0].r.value);
+ if (isNaN(i))
+  {alert('The Red value is not a valid number!')
+   document.forms[0].r.focus();
+   return;
+  }
+ if (i>255-step)
+  alert('The value of red must be less than 255 minus the current step: ' +
+  (255-step))
+ else
+  {document.forms[0].r.value=i+step;
+   DecToHex();
+   changeBG();
+  }
+}
+function GreenPlus()
+{var i=parseInt(document.forms[0].g.value);
+ if (isNaN(i))
+  {alert('The Green value is not a valid number!')
+   document.forms[0].g.focus();
+   return;
+  }
+ if (i>255-step)
+  alert('The value of green must be less than 255 minus the current step: ' +
+  (255-step))
+ else
+  {document.forms[0].g.value=i+step;
+   DecToHex();
+   changeBG();
+  }
+}
+function BluePlus()
+{var i=parseInt(document.forms[0].b.value);
+ if (isNaN(i))
+  {alert('The Blue value is not a valid number!')
+   document.forms[0].b.focus();
+   return;
+  }
+ if (i>255-step)
+  alert('The value of blue must be less than 255 minus the current step: ' +
+  (255-step))
+ else
+  {document.forms[0].b.value=i+step;
+   DecToHex();
+   changeBG();
+  }
+}
+function RedMinus()
+{var i=parseInt(document.forms[0].r.value);
+ if (isNaN(i))
+  {alert('The Red value is not a valid number!')
+   document.forms[0].r.focus();
+   return;
+  }
+ if (i<step)
+  alert('The value of red must be greater than the current step: ' +
+  step)
+ else
+  {document.forms[0].r.value=i-step;
+   DecToHex();
+   changeBG();
+  }
+}
+function GreenMinus()
+{var i=parseInt(document.forms[0].g.value);
+ if (isNaN(i))
+  {alert('The Green value is not a valid number!')
+   document.forms[0].g.focus();
+   return;
+  }
+ if (i<step)
+  alert('The value of green must be greater than the current step: ' +
+  step)
+ else
+  {document.forms[0].g.value=i-step;
+   DecToHex();
+   changeBG();
+  }
+}
+function BlueMinus()
+{var i=parseInt(document.forms[0].b.value);
+ if (isNaN(i))
+  {alert('The Blue value is not a valid number!')
+   document.forms[0].b.focus();
+   return;
+  }
+ if (i<step)
+  alert('The value of blue must be greater than the current step: ' +
+  step)
+ else
+  {document.forms[0].b.value=i-step;
+   DecToHex();
+   changeBG();
+  }
+}
+function change_step()
+{var i=parseInt(document.forms[0].stepper.value);
+ if (isNaN(i))
+  {alert('The step value is not a valid number!');
+   document.forms[0].stepper.value=step;
+   document.forms[0].stepper.focus()
+  }
+ else
+  {if (i<0||i>255)
+    {alert('The step value must be between 0 and 255.');
+     document.forms[0].stepper.value=step;
+     document.forms[0].stepper.focus()
+    }
+   else
+    step=i;
+  }
+}
+// -->
+</SCRIPT>
+ 
+<FORM>
+<TABLE cellPadding=5 width="100%">
+  <TBODY>
+  <TR>
+    <TD vAlign=top>
+      <CENTER>
+      <TABLE cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD colSpan=3><B><FONT color=red>R</FONT><FONT 
+            color=green>G</FONT><FONT color=blue>B</FONT> values 
+            in<BR>Decimal</B></TD>
+          <TD>&nbsp;</TD>
+          <TD><B><FONT color=red>R</FONT><FONT color=green>G</FONT><FONT 
+            color=blue>B</FONT> values in<BR>Hexadecimal</B></TD></TR>
+        <TR>
+          <TD>
+            <CENTER><FONT color=red size=+1>R</FONT></CENTER><INPUT maxLength=3 
+            size=4 value=255 name=r><B>,</B> </TD>
+          <TD>
+            <CENTER><FONT color=green size=+1>G</FONT></CENTER><INPUT 
+            maxLength=3 size=4 value=255 name=g><B>,</B> </TD>
+          <TD>
+            <CENTER><FONT color=blue size=+1>B</FONT></CENTER><INPUT maxLength=3 
+            size=4 value=255 name=b> 
+            <CENTER></CENTER></TD>
+          <TD noWrap><INPUT onclick=DecToHex(); type=button value="Dec to Hex -->"> 
+            <BR><INPUT onclick=HexToDec(); type=button value="<-- Hex to Dec"> 
+          </TD>
+          <TD>#<INPUT maxLength=6 size=8 value=FFFFFF 
+      name=hex></TD></TR></TBODY></TABLE><INPUT onclick=changeBG(); type=button value="See current hex value as background"> 
+      </CENTER></TD>
+    <TD vAlign=top><B><FONT color=red>C</FONT><FONT color=green>o</FONT><FONT 
+      color=blue>l</FONT><FONT color=maroon>o</FONT><FONT color=teal>r</FONT> 
+      <FONT color=navy>W</FONT><FONT color=olive>o</FONT><FONT 
+      color=fuchsia>r</FONT><FONT color=gray>d</FONT><FONT 
+      color=lime>s</FONT></B> <BR>The buttons below are all of the color words 
+      supported by html. When you click on them, the background is changed to 
+      that color using: <BR><TT>"document.bgColor='color_word';"</TT> <BR>(e.g. 
+      color_word could be: Red) <BR>Also, the RGB values which represent those 
+      colors are displayed in the RGB text fields on the left. </TD></TR>
+  <TR>
+    <TD vAlign=top>
+      <CENTER><FONT size=+1>Variable Background Color Changer</FONT> 
+      <TABLE>
+        <TBODY>
+        <TR>
+          <TD><TT><INPUT onclick=RedPlus(); type=button value="+ Red"></TT> 
+          <TD><TT><INPUT onclick=GreenPlus(); type=button value="+ Green"></TT> 
+
+          <TD><TT><INPUT onclick=BluePlus(); type=button value="+ Blue"></TT> 
+          </TD>
+        <TR>
+          <TD><TT><INPUT onclick=RedMinus(); type=button value="- Red"></TT> 
+          <TD><TT><INPUT onclick=GreenMinus(); type=button value="- Green"></TT> 
+
+          <TD><TT><INPUT onclick=BlueMinus(); type=button value="- Blue"></TT> 
+          </TD></TR></TBODY></TABLE>Change the step value for the above buttons to: 
+      <TABLE>
+        <TBODY>
+        <TR>
+          <TD><INPUT maxLength=3 size=4 value=16 name=stepper></TD>
+          <TD><INPUT onclick=change_step(); type=button value=Change></TD></TR></TBODY></TABLE></CENTER></TD>
+    <TD vAlign=top>
+      <TABLE>
+        <TBODY>
+        <TR>
+          <TD><TT><INPUT onclick="document.bgColor='Aqua'; document.forms[0].hex.value='00FFFF'; HexToDec();" type=button value="Aqua   "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Black'; document.forms[0].hex.value='000000'; HexToDec();" type=button value="Black  "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Blue'; document.forms[0].hex.value='0000FF'; HexToDec();" type=button value="Blue   "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Fuchsia'; document.forms[0].hex.value='FF00FF'; HexToDec();" type=button value=Fuchsia></TT></TD></TR>
+        <TR>
+          <TD><TT><INPUT onclick="document.bgColor='Gray'; document.forms[0].hex.value='808080'; HexToDec();" type=button value="Gray   "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Green'; document.forms[0].hex.value='008000'; HexToDec();" type=button value="Green  "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Lime'; document.forms[0].hex.value='00FF00'; HexToDec();" type=button value="Lime   "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Maroon'; document.forms[0].hex.value='800000'; HexToDec();" type=button value="Maroon "></TT></TD></TR>
+        <TR>
+          <TD><TT><INPUT onclick="document.bgColor='Navy'; document.forms[0].hex.value='000080'; HexToDec();" type=button value="Navy   "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Olive'; document.forms[0].hex.value='808000'; HexToDec();" type=button value="Olive  "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Purple'; document.forms[0].hex.value='800080'; HexToDec();" type=button value="Purple "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Red'; document.forms[0].hex.value='FF0000'; HexToDec();" type=button value="Red    "></TT></TD></TR>
+        <TR>
+          <TD><TT><INPUT onclick="document.bgColor='Silver'; document.forms[0].hex.value='C0C0C0'; HexToDec();" type=button value="Silver "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Teal'; document.forms[0].hex.value='008080'; HexToDec();" type=button value="Teal   "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='White'; document.forms[0].hex.value='FFFFFF'; HexToDec();" type=button value="White  "></TT></TD>
+          <TD><TT><INPUT onclick="document.bgColor='Yellow'; document.forms[0].hex.value='FFFF00'; HexToDec();" type=button value="Yellow "></TT></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></FORM>
+<CENTER>This web page is best if viewed on a 800 X 600 resolution or greater. 
+<HR width=770>
+If the above rule is not fully visible, then your screen is LESS than 800 X 
+600</CENTER><BR><BR>This web utility can be used to figure out what color 
+schemes you would like to use for your web pages. Please keep in mind that the 
+colors shown in the background are how the BROWSERS actually show the specified 
+color, and NOT how a graphic program will show the same RGB values. Taking these 
+values and using them in PhotoShop for instance may produce a slightly different 
+color. 
+<P>
+<CENTER>
+<HR width=532>
+<SPAN class=small><A class=item 
+onmouseover="roll(0,'JavaScript',this.href,'highlightsm',0)" 
+href="http://trident.mcs.kent.edu/~jbirk/Web/JavaScript/index.html">JavaScript</A> 
+| <A class=item onmouseover="roll(1,'CGI Counter',this.href,'highlightsm',0)" 
+href="http://trident.mcs.kent.edu/~jbirk/Web/utilities.html">CGI Counter</A> | 
+<A class=item onmouseover="roll(2,'Color Utility',this.href,'highlightsm',0)" 
+href="http://trident.mcs.kent.edu/~jbirk/Web/rgb.html">Color Utility</A> | <A 
+class=item onmouseover="roll(3,'Portfolio',this.href,'highlightsm',0)" 
+href="http://trident.mcs.kent.edu/~jbirk/Web/links.html">Portfolio</A> | <A 
+class=item onmouseover="roll(4,'E-mail me',this.href,'highlightsm',0)" 
+href="mailto:jbirk@cs.kent.edu">E-mail me</A> <BR><A class=item 
+onmouseover="roll(5,'Home',this.href,'highlightsm',0)" 
+href="http://trident.mcs.kent.edu/~jbirk/index.html">Home</A> | <A class=item 
+onmouseover="roll(6,'Family &amp; Friends',this.href,'highlightsm',0)" 
+href="http://trident.mcs.kent.edu/~jbirk/Family/index.html">Family &amp; 
+Friends</A> | <A class=item 
+onmouseover="roll(7,'Web Publishing',this.href,'highlightsm',0)" 
+href="http://trident.mcs.kent.edu/~jbirk/Web/index.html">Web Publishing</A> | <A 
+class=item onmouseover="roll(8,'Cards For Sale',this.href,'highlightsm',0)" 
+href="http://trident.mcs.kent.edu/~jbirk/cardsforsale/index.html">Cards For 
+Sale</A> <BR>Copyright ©2001 Josh Birk. All rights reserved. 
+</SPAN></CENTER></BODY></HTML>

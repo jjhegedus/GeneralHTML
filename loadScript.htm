@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<title>loadScript</title>
+		<script language="javascript">
+			var dialogArgs;
+			var newScript;
+			
+			function load()
+			{
+				try
+				{
+					window.dialogHeight = 0;
+					window.dialogWidth = 0;
+					
+					dialogArgs = window.dialogArguments;
+					var doc = dialogArgs[0];
+					
+					window.onerror = doc.parentWindow.onerror;
+					window.logError = doc.parentWindow.logError;
+					
+					var scriptURL = dialogArgs[1];
+					var baseURL = dialogArgs[2];
+					
+					newScript = doc.createElement('script');
+					newScript.language = 'javascript';
+					newScript.onreadystatechange = newScript_onreadystatechange;
+					
+					doc.all.tags('head')[0].appendChild(newScript);
+					newScript.src = baseURL + scriptURL;
+				}
+				catch(e)
+				{
+					window.close();
+					
+					if(typeof(window.logError) != 'undefined')
+					{
+						if(window.logError)
+						{
+							throw window.logError(e);
+						}
+						else
+						{
+							alert('Error in ' + window.location + ':load()\r' + e.description);
+						}
+					}
+					else
+					{
+						alert('Error in ' + window.location + ':load()\r' + e.description); 
+					}
+				}
+			}
+			function newScript_onreadystatechange()
+			{
+				try
+				{
+					if(this.readyState == 'loaded')
+					{
+						this.onreadystatechange = null;
+						dialogArgs[0].dialogReturn = newScript;
+						window.close();
+					}
+				}
+				catch(e)
+				{
+					alert('Error in ' + window.location + ':newScript_onreadystatechange()\r' + e.description);
+				}
+			}
+		</script>
+	</head>
+	<body onload="load()">
+	</body>
+</html>

@@ -1,0 +1,422 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet type="text/xsl" href="I:\DBFORUM\Designer\HTMLReports\tableDefinition.xsl"?>
+
+<tables>
+	<table name="ENTITY" cellpadding="4">
+		<description>
+			<line>
+<![CDATA[
+Testing Entity used for GTS (Generic Text Subsystem) examples
+]]>
+			</line>
+		</description>
+		<deployment>
+			<line>'WIP' schema:FAC tablespace: WIP_DATA</line>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</deployment>
+		<columns>
+			<column>
+				<name>ENTITY_ID</name>
+				<description>
+<![CDATA[
+The description
+]]>
+</description>
+				<dataType>NUMBER</dataType>
+				<dataLength>10</dataLength>
+				<dataPrecision>0</dataPrecision>
+				<key>Y</key>
+				<unique>Y</unique>
+				<null>N</null>
+				<notes>The notes
+The comment</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>NAME</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>VARCHAR2</dataType>
+				<dataLength>40</dataLength>
+				<dataPrecision>N/A</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>ENTITY_TEXT_ID</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>NUMBER</dataType>
+				<dataLength>10</dataLength>
+				<dataPrecision>0</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<constraints>
+			<constraint>
+				<name>ENTITY_PK</name>
+				<constraint_type>PRIMARY</constraint_type>
+				<check_constraint_type>N/A</check_constraint_type>
+				<cons_columns>
+					<cons_column>
+						<column_name>ENTITY_ID</column_name>
+					</cons_column>
+				</cons_columns>
+			</constraint>
+		</constraints>
+		<indexes>
+		</indexes>
+		<notes>
+The table notes
+		</notes>
+	</table>
+	<table name="ENTITY2" cellpadding="4">
+		<description>
+			<line>
+<![CDATA[
+Testing Entity used for GTS (Generic Text Subsystem) examples
+]]>
+			</line>
+		</description>
+		<deployment>
+			<line>'WIP' schema:FAC tablespace: WIP_DATA</line>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</deployment>
+		<columns>
+			<column>
+				<name>ENTITY2_ID</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>NUMBER</dataType>
+				<dataLength>10</dataLength>
+				<dataPrecision>0</dataPrecision>
+				<key>Y</key>
+				<unique>N</unique>
+				<null>N</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>NAME</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>VARCHAR2</dataType>
+				<dataLength>40</dataLength>
+				<dataPrecision>N/A</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<constraints>
+			<constraint>
+				<name>ENTITY2_PK</name>
+				<constraint_type>PRIMARY</constraint_type>
+				<check_constraint_type>N/A</check_constraint_type>
+				<cons_columns>
+					<cons_column>
+						<column_name>ENTITY2_ID</column_name>
+					</cons_column>
+				</cons_columns>
+			</constraint>
+		</constraints>
+		<indexes>
+		</indexes>
+	</table>
+	<table name="ENTITY2_TEXT" cellpadding="4">
+		<description>
+			<line>
+<![CDATA[
+Testing Entity used for GTS (Generic Text Subsystem) examples
+]]>
+			</line>
+		</description>
+		<deployment>
+			<line>'WIP' schema:FAC tablespace: WIP_DATA</line>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</deployment>
+		<columns>
+			<column>
+				<name>ENTITY2_TEXT_ID</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>NUMBER</dataType>
+				<dataLength>10</dataLength>
+				<dataPrecision>0</dataPrecision>
+				<key>Y</key>
+				<unique>N</unique>
+				<null>N</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>ENTITY2_ID</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>NUMBER</dataType>
+				<dataLength>10</dataLength>
+				<dataPrecision>0</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>N</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>GTS_TEXT_CONCEPT_ID</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>NUMBER</dataType>
+				<dataLength>10</dataLength>
+				<dataPrecision>0</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>N</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>TEXT_TYPE</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>VARCHAR2</dataType>
+				<dataLength>240</dataLength>
+				<dataPrecision>N/A</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>CATEGORY</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>VARCHAR2</dataType>
+				<dataLength>240</dataLength>
+				<dataPrecision>N/A</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<constraints>
+			<constraint>
+				<name>ENTITY2_TEXT_CK1</name>
+				<constraint_type>CHECK</constraint_type>
+				<check_constraint_type>N/A</check_constraint_type>
+				<cons_columns>
+				</cons_columns>
+			</constraint>
+			<constraint>
+				<name>ENTITY2_TEXT_FK1</name>
+				<constraint_type>FOREIGN</constraint_type>
+				<check_constraint_type>N/A</check_constraint_type>
+				<cons_columns>
+					<cons_column>
+						<column_name>ENTITY2_ID</column_name>
+					</cons_column>
+				</cons_columns>
+			</constraint>
+			<constraint>
+				<name>ENTITY2_TEXT_PK</name>
+				<constraint_type>PRIMARY</constraint_type>
+				<check_constraint_type>N/A</check_constraint_type>
+				<cons_columns>
+					<cons_column>
+						<column_name>ENTITY2_TEXT_ID</column_name>
+					</cons_column>
+				</cons_columns>
+			</constraint>
+			<constraint>
+				<name>ENTITY2_TEXT_UC1</name>
+				<constraint_type>UNIQUE</constraint_type>
+				<check_constraint_type>N/A</check_constraint_type>
+				<cons_columns>
+					<cons_column>
+						<column_name>ENTITY2_TEXT_ID</column_name>
+					</cons_column>
+					<cons_column>
+						<column_name>GTS_TEXT_CONCEPT_ID</column_name>
+					</cons_column>
+				</cons_columns>
+			</constraint>
+		</constraints>
+		<indexes>
+			<index>
+				<name>ENTITY2_TEXT_IX1</name>
+				<index_columns>
+					<index_column>
+						<column_name>GTS_TEXT_CONCEPT_ID</column_name>
+					</index_column>
+				</index_columns>
+			</index>
+		</indexes>
+	</table>
+	<table name="TEST" cellpadding="4">
+		<deployment>
+			<line>'WIP' schema:FAC tablespace: WIP_DATA</line>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</deployment>
+		<columns>
+			<column>
+				<name>TEST_ID</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>NUMBER</dataType>
+				<dataLength>10</dataLength>
+				<dataPrecision>0</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>REV_NBR</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>NUMBER</dataType>
+				<dataLength>4</dataLength>
+				<dataPrecision>N/A</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>NAME</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>VARCHAR2</dataType>
+				<dataLength>40</dataLength>
+				<dataPrecision>N/A</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<columns>
+			<column>
+				<name>STATUS</name>
+				<description>
+<![CDATA[
+N/A
+]]>
+</description>
+				<dataType>VARCHAR2</dataType>
+				<dataLength>1</dataLength>
+				<dataPrecision>N/A</dataPrecision>
+				<key>N</key>
+				<unique>N</unique>
+				<null>Y</null>
+				<notes>N/A
+</notes>
+			</column>
+			<line>_CH schema:FAC tablespace:CH_DATA</line>
+			<line>_OF schema:OFL tablespace: OFL_DATA</line>
+		</columns>
+		<constraints>
+		</constraints>
+		<indexes>
+		</indexes>
+	</table>
+</tables>

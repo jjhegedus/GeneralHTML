@@ -1,0 +1,47 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Reference\bootstrap.js = Reference\bootstrap.js
+		centrifugeObjectEditor.htm = centrifugeObjectEditor.htm
+		centrifugeTestHarness.htm = centrifugeTestHarness.htm
+		CreateDatabaseCode.hta = CreateDatabaseCode.hta
+		CreateXMLDialog.hta = CreateXMLDialog.hta
+		CreateXMLDialog.htm = CreateXMLDialog.htm
+		Database.js = Database.js
+		Drive.js = Drive.js
+		ErrorManagement.js = ErrorManagement.js
+		File.js = File.js
+		Folder.js = Folder.js
+		initialize.js = initialize.js
+		JavascriptFunction.js = JavascriptFunction.js
+		loadScript.htm = loadScript.htm
+		MyComputer.js = MyComputer.js
+		ObjectCollection.js = ObjectCollection.js
+		OracleDatabase.js = OracleDatabase.js
+		OutlookManager.hta = OutlookManager.hta
+		reports.xsl = reports.xsl
+		TableAPIReport.hta = TableAPIReport.hta
+		tableDefinition.xsl = tableDefinition.xsl
+		template.htm = template.htm
+		template.xsd = template.xsd
+		test.htm = test.htm
+		TextField.js = TextField.js
+		TextFile.js = TextFile.js
+		TextRecord.js = TextRecord.js
+		TextRecordset.js = TextRecordset.js
+		Utility.js = Utility.js
+		XmlDocument.js = XmlDocument.js
+		XmlNode.js = XmlNode.js
+		XmlSchema.js = XmlSchema.js
+		XmlSchemaCache.js = XmlSchemaCache.js
+		XMLSchemaEditor.htm = XMLSchemaEditor.htm
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

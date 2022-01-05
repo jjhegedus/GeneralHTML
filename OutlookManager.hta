@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<!-- blank title should be populated in the instanciated template -->
+		<title>HTML Reports - Index</title>
+		<HTA:APPLICATION ID="outlookManager"
+			 APPLICATIONNAME="outlookManager"
+			 BORDER="thin"
+			 BORDERSTYLE="normal"
+			 CAPTION="yes"
+			 ICON=""
+			 MAXIMIZEBUTTON="yes"
+			 MINIMIZEBUTTON="yes"
+			 SHOWINTASKBAR="yes"
+			 SINGLEINSTANCE="yes"
+			 SYSMENU="yes"
+			 VERSION="1.0"
+			 WINDOWSTATE="maximize"/>
+		<!-- <base href="C:\Documents and Settings\JHegedus2\My Documents\Projects\html\General"/> -->
+		<script language="javascript" src="initialize.js"></script>
+		<script language="javascript">
+			// Avoid Global variables if possible.  If global variables are necessary,
+			// use window.<variableName> instead of "var variableName;"
+			
+			// The afterInitialize function is called by the initialize routine when it completes
+			function afterInitialize()
+			{
+				try
+				{
+					
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+		</script>
+	</head>
+	<body onload="initialize()" body.width="100%" body.height="100%">
+	</body>
+</html>

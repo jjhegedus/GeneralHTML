@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" > 
+
+<html>
+  <head>
+    <meta name=vs_targetSchema content="http://schemas.microsoft.com/intellisense/ie5">
+<title>Centrifuge Test Harness</title>
+    <script language="javascript">
+      function executeButton_onclick()
+      {
+        var testFunction = new TemplateFunction(commandWindow.innerText);
+        var returnString = testFunction();
+        
+        if(typeof(returnString) == "undefined")
+        {
+          // don't do anything
+        }
+        else
+        {
+          if(returnString.length > 0)
+          {
+						resultsWindow.innerText = returnString;
+					}
+				}
+      }
+			function TemplateFunction(functionString, argumentsString)
+			{
+				try
+				{
+					var templateFunctionString = "";
+					
+					templateFunctionString += "try\r";
+					templateFunctionString += "{\r";
+
+					templateFunctionString += functionString;
+					
+					templateFunctionString += "}\r";
+					templateFunctionString += "catch(e)\r";
+					templateFunctionString += "{\r";
+					templateFunctionString += "	throw logError(e);\r";
+					templateFunctionString += "}\r";
+					
+					if(argumentsString)
+					{
+						return new Function(argumentsString, templateFunctionString);
+					}
+					else
+					{
+						return new Function(templateFunctionString);
+					}
+				}
+				catch(e)
+				{
+					throw logError(e);
+				}
+			}
+    </script>
+  </head>
+  <body id="body">
+    <script src="reference/bootstrap.js" language="javascript">
+    </script>
+    <h1>Test Harness</h1><br/>
+    <h2>Command Window</h2><br/>
+    <textarea id="commandWindow" style="height:200;width:1000" NAME="commandWindow"></textarea><br/>
+    <h2>Results Window</h2><br/>
+    <textarea id="resultsWindow" style="height:200;width:1000" NAME="resultsWindow"></textarea><br/>
+    <input type="button" id="executeButton" value="execute" onclick="executeButton_onclick()" NAME="executeButton"/>
+  </body>
+</html>

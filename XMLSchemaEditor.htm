@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>XML Schema Editor</title>
+		<meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<script language="javascript" src="Utility.js"></script>
+		<script language="javascript" src="ErrorManagement.js"></script>
+		<script language="javascript" src="JavascriptFunction.js"></script>
+		<script language="javascript" src="XmlNode.js"></script>
+		<script language="javascript" src="XmlDocument.js"></script>
+		<script language="javascript" src="XmlSchema.js"></script>
+		<script language="javascript">
+		  function body_onload()
+		  {
+		    try
+		    {
+					var xmlSchema = new XmlSchema();
+					xmlSchema.setTargetNamespace("http://www.medispan.com/test.xsd");
+					//xmlSchema.setDefaultNamespace("http://www.medispan.com/test.xsd");
+					xmlSchema.setNamespace("http://www.medispan.com/test.xsd", "test");
+					
+					alert("xmlSchema.toString() = \r\r" + xmlSchema.toString());
+				}
+				catch(e)
+				{
+				  throw logError(e);
+				}
+		  }
+		</script>
+	</head>
+	<body onload="body_onload()" style="width:100%;height:100%">
+	</body>
+</html>
