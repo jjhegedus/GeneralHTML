@@ -1,1 +1,1 @@
-# GeneralHTML - Collection of HTML and javascript code
+# GeneralHTML - Collection of older HTML and javascript code
